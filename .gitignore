@@ -11,9 +11,6 @@ __pycache__/
 .env
 .pem
 
-# Heroku
-Procfile
-
 # IDE
 .vscode
 
