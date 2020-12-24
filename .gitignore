@@ -1,0 +1,22 @@
+# Django
+*.log
+*.pot
+*.pyc
+__pycache__/
+
+# Distribution / packaging
+.Python
+
+# Keys
+.env
+.pem
+
+# Heroku
+Procfile
+
+# IDE
+.vscode
+
+# Others
+.DS_Store
+.json
