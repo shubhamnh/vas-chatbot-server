@@ -26,15 +26,15 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     queryset = models.UserProfile.objects.all()
     permission_classes = (permissions.UpdateOwnProfile, IsAdminUser,)
     filter_backends = (filters.SearchFilter,)
-    lookup_field = 'rno'
-    search_fields = ('name', 'rno')
+    lookup_field = 'rollno'
+    search_fields = ('name', 'rollno')
 
 class UserInfoViewSet(mixins.UpdateModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """Getting info of logged in user"""
 
     serializer_class = serializers.UserInfoSerializer
     permission_classes = (permissions.UpdateOwnProfile, IsAuthenticated,)
-    lookup_field = 'rno'
+    lookup_field = 'rollno'
     queryset = models.UserProfile.objects.all()
 
 class QueryApiView(APIView):
@@ -52,7 +52,7 @@ class QueryApiView(APIView):
         user = self.request.user
         if serializer.is_valid():
             query = serializer.data.get('query')
-            resp = 'Is your name {0}?<br/>And roll no. {1}??'.format(user.name, user.rno)
+            resp = 'Is your name {0}?<br/>And roll no. {1}??'.format(user.name, user.rollno)
 
             for string in self.string_list:
                 if string.lower() in query.lower():
@@ -67,7 +67,7 @@ class NotifApiView(APIView):
 
     serializer_class = serializers.NotifSerializer
     permission_classes = (IsAuthenticated,)
-    queryset = (models.UserProfile.objects.all(), models.Information.objects.all())
+    queryset = (models.UserProfile.objects.all(), models.GroupNotification.objects.all())
 
     def get(self, request):
         """Get Notifications as per user Class & Interests"""
@@ -75,9 +75,9 @@ class NotifApiView(APIView):
         user = self.request.user
         class_column = ''
 
-        if (user.sem == 3 or user.sem == 4):
+        if (user.ayear == 'SE'):
             class_column = 'se_cmpn_'
-        elif (user.sem == 5 or user.sem == 6):
+        elif (user.ayear == 'TE'):
             class_column = 'te_cmpn_'
         else:
             class_column = 'be_cmpn_'
@@ -109,14 +109,13 @@ class NotifApiView(APIView):
 
         if (len(user_interests)>0):
             user_interests = user_interests[3:]
-        print (user_interests)
 
         kwargs = {
             '{0}'.format(class_column,): 'True',
         }
         args = (eval(user_interests),)
 
-        notifs = models.Information.objects.all().filter(*args, **kwargs).order_by('-nid')
+        notifs = models.GroupNotification.objects.all().filter(*args, **kwargs).order_by('-nid')
         serializer = serializers.NotifSerializer(notifs, many=True)
         return Response(serializer.data)
 
@@ -141,7 +140,7 @@ class IndividualNotifApiView(APIView):
         """Get Individual Notifications"""
 
         user = self.request.user
-        notifs = models.Individual.objects.all().filter(rollno=user.rno).order_by('-id')
+        notifs = models.Individual.objects.all().filter(rollno=user.rollno).order_by('-id')
         serializer = serializers.IndividualNotifSerializer(notifs, many=True)
         return Response(serializer.data)
 
@@ -164,7 +163,7 @@ class SupportApiView(APIView):
 
     serializer_class = serializers.SupportSerializer
     permission_classes = (IsAuthenticated,)
-    lookup_field = 'rno'
+    lookup_field = 'rollno'
     queryset = (models.UserProfile.objects.all())
 
     def post(self, request):
@@ -173,7 +172,7 @@ class SupportApiView(APIView):
         user = self.request.user
         serializer = serializers.SupportSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(name=user.name, rno=user.rno)
+            serializer.save(name=user.name, rollno=user.rollno)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -182,7 +181,7 @@ class ChangePasswordViewSet(mixins.UpdateModelMixin, viewsets.GenericViewSet):
 
     serializer_class = serializers.ChangePasswordSerializer
     permission_classes = (permissions.UpdateOwnProfile, IsAuthenticated,)
-    lookup_field = 'rno'
+    lookup_field = 'rollno'
     queryset = models.UserProfile.objects.all()
 
     def update(self, request, *args, **kwargs):

@@ -9,7 +9,7 @@ class UpdateOwnProfile(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        return obj.rno == request.user.rno
+        return obj.rollno == request.user.rollno
 
 class IsOwner(permissions.BasePermission):
     """
@@ -21,4 +21,4 @@ class IsOwner(permissions.BasePermission):
         return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
-        return obj.rno == request.user.rno
+        return obj.rollno == request.user.rollno

@@ -1,6 +1,7 @@
 from django.contrib import admin
-from . import models
-# Register your models here.
+from .models import IndividualNotification, GroupNotification, Feedback, ConcessionApplication
 
-admin.site.register(models.UserProfile)
-# admin.site.register(models.Interests)
+admin.site.register(IndividualNotification)
+admin.site.register(GroupNotification)
+admin.site.register(Feedback)
+admin.site.register(ConcessionApplication)

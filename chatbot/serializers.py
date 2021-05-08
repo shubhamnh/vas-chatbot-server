@@ -6,19 +6,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.UserProfile
-        fields = ('rno', 'name', 'sem', 'division', 'password')
-        lookup_field = 'rno'
+        fields = ('rollno', 'name', 'sem', 'division', 'password')
+        lookup_field = 'rollno'
         extra_kwargs = {
             'last_login': {'read_only': True},
             'password': {'write_only': True},
-            'url': {'lookup_field': 'rno'}
+            'url': {'lookup_field': 'rollno'}
         }
 
     def create(self, validated_data):
         """Used to create a new user."""
 
         user = models.UserProfile(
-            rno=validated_data['rno'],
+            rollno=validated_data['rno'],
             name=validated_data['name'],
         )
 
@@ -33,9 +33,9 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.UserProfile
         fields = ('passw',)
-        lookup_field = 'rno'
+        lookup_field = 'rollno'
         extra_kwargs = {
-            'url': {'lookup_field': 'rno'}
+            'url': {'lookup_field': 'rollno'}
         }
 
 class UserInfoSerializer(serializers.ModelSerializer):
@@ -43,11 +43,11 @@ class UserInfoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.UserProfile
-        fields = ('rno', 'name', 'batch', 'workshop', 'sports', 'creative', 'cultural', 'placement', 'dance', 'drama', 'study')
-        read_only_fields = ('rno', 'name',)
-        lookup_field = 'rno'
+        fields = ('rollno', 'name', 'batch', 'workshop', 'sports', 'creative', 'cultural', 'placement', 'dance', 'drama', 'study')
+        read_only_fields = ('rollno', 'name',)
+        lookup_field = 'rollno'
         extra_kwargs = {
-            'url': {'lookup_field': 'rno'}
+            'url': {'lookup_field': 'rollno'}
         }
 
 class QuerySerializer(serializers.Serializer):
@@ -59,7 +59,7 @@ class NotifSerializer(serializers.ModelSerializer):
     """Group Notif Serializer"""
 
     class Meta:
-        model = models.Information
+        model = models.GroupNotification
         fields = ('notification', 'interest', 'date', 'filepresent', 'filename')
 
 class IndividualNotifSerializer(serializers.ModelSerializer):
@@ -74,4 +74,4 @@ class SupportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Support
-        fields = ('subject', 'details', 'rno', 'name')
+        fields = ('subject', 'details', 'rollno', 'name')

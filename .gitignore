@@ -3,12 +3,14 @@
 *.pot
 *.pyc
 __pycache__/
+*.sqlite3
 
 # Distribution / packaging
 .Python
 
 # Keys
 .env
+.env_dev
 .pem
 
 # IDE
@@ -16,4 +18,4 @@ __pycache__/
 
 # Others
 .DS_Store
-.json
+*.json

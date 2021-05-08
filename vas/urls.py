@@ -15,17 +15,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.conf.urls import url, include
-from rest_framework import routers
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from django.urls import path, include
 
-router = routers.DefaultRouter()
-
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^login/', include('chatbot.urls')),
-	url(r'^api-token-auth/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-	url(r'^api-token-verify/', TokenVerifyView.as_view(), name='token_verify'),
+    
+    path('admin/', admin.site.urls),
+
+    path('api/', include('api.urls')),
 ]
