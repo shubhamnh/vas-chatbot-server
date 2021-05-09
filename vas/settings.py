@@ -29,7 +29,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = ['vas-pwa.herokuapp.com']
+ALLOWED_HOSTS = env.str('ALLOWED_HOSTS', 'localhost').split(',')
 
 
 # Application definition
@@ -87,10 +87,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_WHITELIST = (
-    'https://vas-pwa.firebaseapp.com',
-    'https://vas-pwa.web.app',
-)
+CORS_ORIGIN_WHITELIST = env.str('CORS_ORIGIN_WHITELIST', 'http://localhost:8080').split(',')
 
 ROOT_URLCONF = 'vas.urls'
 
