@@ -83,7 +83,7 @@ class IndividualNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IndividualNotification
-        fields = ('teacher', 'subject', 'notice')
+        fields = ('teacher', 'subject', 'notice', 'creation_date')
 
 class GroupNotificationSerializer(serializers.ModelSerializer):
     teacher = serializers.CharField(source='teacher.user.get_full_name')
@@ -91,7 +91,7 @@ class GroupNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupNotification
-        fields = ('teacher','subject','notice','interest')
+        fields = ('teacher','subject','notice','interest', 'creation_date')
 
 class QuerySerializer(serializers.Serializer):
     """Query Serializer"""

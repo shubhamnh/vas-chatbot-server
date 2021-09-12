@@ -100,6 +100,6 @@ class QueryApiView(APIView):
 
                 return Response({'response': json_response})
             else:
-                return Response({'response': {'text':'Something seems to be wrong with our Assistant. :( Try again later maybe?'} })
+                return Response({'response': [{'text':'Something seems to be wrong with our Assistant. :( Try again later maybe?'}] })
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
