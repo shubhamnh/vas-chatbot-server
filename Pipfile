@@ -9,8 +9,9 @@ djangorestframework = "*"
 django-push-notifications = "*"
 django-environ = "*"
 django-cors-headers = "*"
+djangorestframework-simplejwt = "==4.6.0"
+psycopg2 = "*"
 mysqlclient = "*"
-djangorestframework-simplejwt = "*"
 
 [dev-packages]
 pylint = "*"
