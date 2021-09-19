@@ -13,6 +13,7 @@ djangorestframework-simplejwt = "==4.6.0"
 psycopg2 = "*"
 mysqlclient = "*"
 whitenoise = "*"
+json2html = "*"
 
 [dev-packages]
 pylint = "*"

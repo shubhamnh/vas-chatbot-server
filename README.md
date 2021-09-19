@@ -149,12 +149,15 @@ Generate the secret key by running the following from the command line:
 
 ```json
 {
-  "response": "[
+  "response": [
       {
-          text: "Hey! How you doin?"
+          "text": "Hey! How you doin?"
+      },
+      {
+          "image": "https://example.com/wave.jpg"
       },
       ...
-  ]"
+  ]
 }
 ```
 

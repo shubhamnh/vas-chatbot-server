@@ -1,10 +1,8 @@
 from rest_framework import serializers
-from rest_framework.exceptions import NotFound
-from rest_framework.fields import CurrentUserDefault
 
-from django.db import models
 from users.models import Student, Interest, InterestStatus
 from chatbot.models import Feedback, IndividualNotification, GroupNotification
+from academics.models import TimeTable
 
 class StudentSerializer(serializers.ModelSerializer):
     name = serializers.CharField(source='user.get_full_name')
@@ -97,3 +95,14 @@ class QuerySerializer(serializers.Serializer):
     """Query Serializer"""
 
     query = serializers.CharField(allow_blank=False)
+
+class TimetableSerializer(serializers.ModelSerializer):
+    Day = serializers.CharField(source='get_weekday_display')
+    Time = serializers.CharField(source='timing')
+    Professor = serializers.CharField(source='teacher.user.get_full_name')
+    Subject = serializers.CharField(source='course.name')
+    Room = serializers.CharField(source='classroom')
+
+    class Meta:
+        model = TimeTable
+        fields = ('Day', 'Time', 'Professor', 'Subject', 'Room')

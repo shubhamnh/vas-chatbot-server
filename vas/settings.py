@@ -12,7 +12,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=False)
+DEBUG = env.str('DEBUG', default='False').lower() in ('true', '1', 't')
 
 ALLOWED_HOSTS = env.str('ALLOWED_HOSTS').split(',')
 
@@ -85,6 +85,8 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = env.str('CORS_ORIGIN_WHITELIST').split(',')
 
 ROOT_URLCONF = 'vas.urls'
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 
 TEMPLATES = [
     {

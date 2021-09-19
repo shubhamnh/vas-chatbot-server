@@ -27,16 +27,17 @@ class TimeTable(models.Model):
         ("17:45-18:45","17:45-18:45"),
     ]
     WEEKDAY_CHOICES = [
-        ("MON","MONDAY"),
-        ("TUE","TUESDAY"),
-        ("WED","WEDNESDAY"),
-        ("THU","THURSDAY"),
-        ("FRI","FRIDAY"),
-        ("SAT","SATURDAY"),
+        (0,"Monday"),
+        (1,"Tuesday"),
+        (2,"Wednesday"),
+        (3,"Thursday"),
+        (4,"Friday"),
+        (5,"Saturday"),
+        (6,"Sunday"),
     ]
     BATCH_CHOICES = [(1,'1'), (2,'2'), (3,'3'), (4,'4'), (5,'5')]
 
-    weekday = models.CharField(max_length=3, choices=WEEKDAY_CHOICES, blank=False)
+    weekday = models.PositiveSmallIntegerField(choices=WEEKDAY_CHOICES, blank=False)
     timing = models.CharField(max_length=11, choices=TIME_CHOICES, blank=False)
     teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
@@ -45,7 +46,7 @@ class TimeTable(models.Model):
     batch = models.PositiveSmallIntegerField(choices=BATCH_CHOICES, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.tclass} - {self.weekday} - {self.timing}"
+        return f"{self.tclass} - {self.get_weekday_display()} - {self.timing}"
     
     class Meta:
         unique_together = (('weekday','timing','teacher','course','classroom','tclass','batch'))
