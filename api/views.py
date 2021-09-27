@@ -113,7 +113,7 @@ class QueryApiView(APIView):
 def timetable_response(self):
     student = self.request.user.student
     student_class = student.current_class
-    qs = TimeTable.objects.filter(tclass=student_class)
+    qs = TimeTable.objects.filter(tclass=student_class).order_by('weekday')
 
     serializer = TimetableSerializer(qs, many=True)
 
@@ -129,11 +129,14 @@ def timetable_day_response(self, day):
     today = datetime.now().weekday()
 
     qs = TimeTable.objects.filter(tclass=student_class)
+    day = day.lower()
 
     if day == 'today':
         qs = qs.filter(weekday=today)
     elif day == 'tomorrow':
         qs = qs.filter(weekday=today+1)
+    else:
+        day = ''
 
     serializer = TimetableSerializer(qs, many=True)
 
@@ -141,7 +144,7 @@ def timetable_day_response(self, day):
         holiday = f'Looks like you have no lectures for {day}! <br> Go out and enjoy!'
         return Response(create_text_response(holiday), status=status.HTTP_200_OK)
 
-    text = f"Your timetable for {day} is as follows:"
+    text = f"Your timetable for {day or 'the week'} is as follows:"
     table = json2html.convert(json = serializer.data)
     response = create_response([{'text':text},{'table':table}])
 
