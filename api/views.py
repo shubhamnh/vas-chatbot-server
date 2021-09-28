@@ -98,67 +98,66 @@ class QueryApiView(APIView):
                         intent = custom['intent']
                         
                         if intent == 'timetable':
-                            return timetable_response(self)
+                            return self.timetable_response()
                         elif intent == 'timetable_day':
-                            return timetable_day_response(self, custom['day'])
+                            return self.timetable_day_response(custom['day'])
                         else:
-                            return Response(create_text_response('My maker has made some stupid decisions. Sorry for the trouble. :('))
+                            return Response(self.create_text_response('My maker has made some stupid decisions. Sorry for the trouble. :('))
 
                 return Response({'response': json_response})
             else:
-                return Response(create_text_response('Something seems to be wrong with our Assistant. :( Try again maybe?'))
+                return Response(self.create_text_response('Something seems to be wrong with our Assistant. :( Try again maybe?'))
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def timetable_response(self):
-    student = self.request.user.student
-    student_class = student.current_class
-    qs = TimeTable.objects.filter(tclass=student_class).order_by('weekday')
+    def timetable_response(self):
+        student = self.request.user.student
+        student_class = student.current_class
+        qs = TimeTable.objects.filter(tclass=student_class).order_by('weekday')
 
-    serializer = TimetableSerializer(qs, many=True)
+        serializer = TimetableSerializer(qs, many=True)
 
-    text = 'Your timetable for the week is as follows:'
-    table = json2html.convert(json = serializer.data)
-    response = create_response([{'text':text},{'table':table}])
+        text = 'Your timetable for the week is as follows:'
+        table = json2html.convert(json = serializer.data)
+        response = self.create_response([{'text':text},{'table':table}])
 
-    return Response(response, status=status.HTTP_200_OK)
-    
-def timetable_day_response(self, day):
-    student = self.request.user.student
-    student_class = student.current_class
-    today = datetime.now().weekday()
+        return Response(response, status=status.HTTP_200_OK)
+        
+    def timetable_day_response(self, day):
+        student = self.request.user.student
+        student_class = student.current_class
+        today = datetime.now().weekday()
 
-    qs = TimeTable.objects.filter(tclass=student_class)
-    day = day.lower()
+        qs = TimeTable.objects.filter(tclass=student_class)
+        day = day.lower()
 
-    if day == 'today':
-        qs = qs.filter(weekday=today)
-    elif day == 'tomorrow':
-        qs = qs.filter(weekday=today+1)
-    else:
-        day = ''
+        if day == 'today':
+            qs = qs.filter(weekday=today)
+        elif day == 'tomorrow':
+            qs = qs.filter(weekday=today+1)
+        else:
+            day = ''
 
-    serializer = TimetableSerializer(qs, many=True)
+        serializer = TimetableSerializer(qs, many=True)
 
-    if not serializer.data:
-        holiday = f'Looks like you have no lectures for {day}! <br> Go out and enjoy!'
-        return Response(create_text_response(holiday), status=status.HTTP_200_OK)
+        if not serializer.data:
+            holiday = f'Looks like you have no lectures for {day}! <br> Go out and enjoy!'
+            return Response(self.create_text_response(holiday), status=status.HTTP_200_OK)
 
-    text = f"Your timetable for {day or 'the week'} is as follows:"
-    table = json2html.convert(json = serializer.data)
-    response = create_response([{'text':text},{'table':table}])
+        text = f"Your timetable for {day or 'the week'} is as follows:"
+        table = json2html.convert(json = serializer.data)
+        response = self.create_response([{'text':text},{'table':table}])
 
-    return Response(response, status=status.HTTP_200_OK)
+        return Response(response, status=status.HTTP_200_OK)
 
+    def create_response(self, dictList):
+        return {
+            'response': dictList
+        }
 
-def create_response(objectArray):
-    return {
-        'response': objectArray
-    }
-
-def create_text_response(text):
-    return {
-        'response': [{
-            'text': text
-        }]
-    }
+    def create_text_response(self, text):
+        return {
+            'response': [{
+                'text': text
+            }]
+        }

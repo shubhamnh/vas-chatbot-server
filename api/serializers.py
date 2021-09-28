@@ -32,9 +32,9 @@ class SettingsSerializer(serializers.ModelSerializer):
     def validate(self, data):
         # Validate id and interest name combination
         user_interests = data['interests']
-        for x in range(len(user_interests)):
-            interest_id = user_interests[x].get('interest').get('id')
-            name = user_interests[x].get('interest').get('name')
+        for interest in range(len(user_interests)):
+            interest_id = user_interests[interest].get('interest').get('id')
+            name = user_interests[interest].get('interest').get('name')
             
             # TO DO - Check db hits
             if not Interest.objects.filter(id__exact=interest_id, name__exact=name).exists():
@@ -59,6 +59,7 @@ class SettingsSerializer(serializers.ModelSerializer):
                 interest_instance = instance.interests.get(interest__id=interest_id)
                 interest_instance.status = changed_interest.get('status', interest_instance.status)
                 interest_instance.save()
+                
             except InterestStatus.DoesNotExist:
                 InterestStatus.objects.create(student=user.student, interest_id=interest_id, status=status)
 

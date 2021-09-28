@@ -76,20 +76,3 @@ class InterestStatus(models.Model):
 
     def __str__(self):
         return f"{self.student.user.get_full_name()} - {self.interest.name} - {self.status}"
-
-# class Interest(models.Model):
-#     student = models.OneToOneField(Student, on_delete=models.CASCADE)
-#     workshop = models.BooleanField(default=True)
-#     sports = models.BooleanField(default=True)
-#     creative = models.BooleanField(default=True)
-#     cultural = models.BooleanField(default=True)
-#     placement = models.BooleanField(default=True)
-#     dance = models.BooleanField(default=True)
-#     drama = models.BooleanField(default=True)
-#     study = models.BooleanField(default=True)
-
-#     def __str__(self):
-#         return self.student.user.get_full_name() + '\'s Interests'
-
-#     class Meta:
-#         verbose_name_plural = 'Interests'
